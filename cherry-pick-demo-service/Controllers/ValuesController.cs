@@ -14,7 +14,7 @@ namespace cherry_pick_demo_service.Controllers
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
         {
-            var result = id + 1;
+            var result = id - 1;
             return result.ToString();
         }
     }
