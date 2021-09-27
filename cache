@@ -32,6 +32,21 @@ public interface IRedisCacheService
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1),
                 SlidingExpiration = TimeSpan.FromMinutes(10)
             };
+            
+            
+           var cachedId = _redisCache.Get<Employee>(employeeID.ToString());
+
+            if (cachedId != null) return cachedId;
+
+            else
+            {
+                Employee emp = _context.Employee.Find(employeeID.ToString());
+                //Lets now cache this object
+                if(emp!=null)
+                _redisCache.Set<Employee>(employeeID.ToString(), emp);
+                //return the same object if accessed first time within timeout period
+                return emp;
+            }
 
             _cache.SetString(key, JsonSerializer.Serialize(value), timeOut);
 
